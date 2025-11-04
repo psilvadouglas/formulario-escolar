@@ -59,6 +59,60 @@
       text-align: center;
       margin-top: 10px;
     }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 15px 10px;
+      font-size: 0.9em;
+      color: #555;
+      border-top: 1px solid #ddd;
+      background-color: #f0f0f0;
+    }
+
+    footer a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Layout do rodapé com imagem e texto lado a lado */
+    .assinatura {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px; /* espaço entre imagem e texto */
+      flex-wrap: wrap; /* permite quebrar linha em telas pequenas */
+    }
+
+    .assinatura img {
+      width: 80px;  /* imagem maior */
+      height: 80px; /* quadrada */
+      border-radius: 10px; /* cantos levemente arredondados */
+      object-fit: cover; /* ajusta bem dentro do quadrado */
+      box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    }
+
+    .info-rodape {
+      text-align: left;
+      line-height: 1.4;
+    }
+
+    .info-rodape strong {
+      color: #333;
+    }
+
+    @media (max-width: 500px) {
+      .assinatura {
+        flex-direction: column; /* imagem em cima no celular */
+      }
+      .info-rodape {
+        text-align: center;
+      }
+    }
   </style>
 </head>
 <body>
@@ -101,9 +155,9 @@
       <option value="7º Ano">7º Ano</option>
       <option value="8º Ano">8º Ano</option>
       <option value="9º Ano">9º Ano</option>
-        <option value="1º Ano Ensino Médio">1º Ano Ensino Médio</option>
-        <option value="2º Ano Ensino Médio">2º Ano Ensino Médio</option>
-        <option value="3º Ano Ensino Médio">3º Ano Ensino Médio</option>
+      <option value="1º Ano Ensino Médio">1º Ano Ensino Médio</option>
+      <option value="2º Ano Ensino Médio">2º Ano Ensino Médio</option>
+      <option value="3º Ano Ensino Médio">3º Ano Ensino Médio</option>
     </select>
 
     <button type="button" onclick="enviarWhatsApp()">Enviar pelo WhatsApp</button>
@@ -116,7 +170,6 @@
     let latitude = null;
     let longitude = null;
 
-    // Tenta obter localização com melhor compatibilidade
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
@@ -136,7 +189,6 @@
       document.getElementById("alerta").innerText = "Seu navegador não suporta geolocalização.";
     }
 
-    // Envia dados via WhatsApp
     function enviarWhatsApp() {
       const nome = document.getElementById("nome").value.trim();
       const escola = document.getElementById("escola").value.trim();
@@ -160,19 +212,20 @@
           ? `📍 Localização: https://www.google.com/maps?q=${latitude},${longitude}`
           : "📍 Localização: Não capturada");
 
-      // Substitua o número abaixo pelo seu número de WhatsApp (ex: 55 + DDD + número)
       const numeroWhatsApp = "5538991006958";
-
       const urlApp = `whatsapp://send?phone=${numeroWhatsApp}&text=${mensagem}`;
-window.location.href = urlApp;
-
+      window.location.href = urlApp;
     }
   </script>
-    <footer style="text-align:center; margin-top:20px; font-size:0.9em; color:#555;">
- Criado por <strong>Douglas Silva</strong> • Graphic Designer<br>
-    📞 <a href="https://wa.me/5538999565216" target="_blank" style="color:#4CAF50; text-decoration:none;">
-      (38) 99956-5216
-    </a>
+
+  <footer>
+    <div class="assinatura">
+      <img src="douglas.jpg" alt="Logo da empresa">
+      <div class="info-rodape">
+        Criado por <strong>Douglas Silva</strong> • Graphic Designer<br>
+        📞 <a href="https://wa.me/5538999565216" target="_blank">(38) 99956-5216</a>
+      </div>
+    </div>
   </footer>
 
 </body>
