@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulário Escolar</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    form {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #444;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    iframe {
+      width: 100%;
+      height: 300px;
+      border: 0;
+      margin-top: 20px;
+    }
+    .alerta {
+      color: red;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Formulário Escolar</h2>
+  <form id="escolaForm">
+    <label for="nome">Nome completo:</label>
+    <input type="text" id="nome" name="nome" required>
+
+    <label for="escola">Nome da escola:</label>
+    <input type="text" id="escola" name="escola" required>
+
+    <label for="tipo">Tipo da escola:</label>
+    <select id="tipo" name="tipo" required>
+      <option value="">Selecione</option>
+      <option value="Municipal">Municipal</option>
+      <option value="Estadual">Estadual</option>
+    </select>
+
+    <label for="turno">Turno:</label>
+    <select id="turno" name="turno" required>
+      <option value="">Selecione</option>
+      <option value="Manhã">Manhã</option>
+      <option value="Tarde">Tarde</option>
+      <option value="Noite">Noite</option>
+    </select>
+
+    <label for="serie">Série:</label>
+    <select id="serie" name="serie" required>
+      <option value="">Selecione</option>
+      <option value="Creche">Creche</option>
+      <option value="Maternal">Maternal</option>
+      <option value="1º Período">1º Período</option>
+      <option value="2º Período">2º Período</option>
+      <option value="1º Ano">1º Ano</option>
+      <option value="2º Ano">2º Ano</option>
+      <option value="3º Ano">3º Ano</option>
+      <option value="4º Ano">4º Ano</option>
+      <option value="5º Ano">5º Ano</option>
+      <option value="6º Ano">6º Ano</option>
+      <option value="7º Ano">7º Ano</option>
+      <option value="8º Ano">8º Ano</option>
+      <option value="9º Ano">9º Ano</option>
+        <option value="1º Ano Ensino Médio">1º Ano Ensino Médio</option>
+        <option value="2º Ano Ensino Médio">2º Ano Ensino Médio</option>
+        <option value="3º Ano Ensino Médio">3º Ano Ensino Médio</option>
+    </select>
+
+    <button type="button" onclick="enviarWhatsApp()">Enviar pelo WhatsApp</button>
+  </form>
+
+  <div id="mapaContainer"></div>
+  <p class="alerta" id="alerta"></p>
+
+  <script>
+    let latitude = null;
+    let longitude = null;
+
+    // Tenta obter localização com melhor compatibilidade
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          latitude = pos.coords.latitude;
+          longitude = pos.coords.longitude;
+          document.getElementById("mapaContainer").innerHTML =
+            `<iframe src="https://www.google.com/maps?q=${latitude},${longitude}&z=15&output=embed"></iframe>`;
+        },
+        (error) => {
+          document.getElementById("alerta").innerText =
+            "⚠️ Não foi possível acessar sua localização. Ative a permissão ou use HTTPS (ex: LocalTunnel).";
+          console.error(error);
+        },
+        { timeout: 10000 }
+      );
+    } else {
+      document.getElementById("alerta").innerText = "Seu navegador não suporta geolocalização.";
+    }
+
+    // Envia dados via WhatsApp
+    function enviarWhatsApp() {
+      const nome = document.getElementById("nome").value.trim();
+      const escola = document.getElementById("escola").value.trim();
+      const tipo = document.getElementById("tipo").value;
+      const turno = document.getElementById("turno").value;
+      const serie = document.getElementById("serie").value;
+
+      if (!nome || !escola || !tipo || !turno || !serie) {
+        alert("Por favor, preencha todos os campos obrigatórios.");
+        return;
+      }
+
+      const mensagem =
+        `*Novo Formulário Escolar*%0A` +
+        `👤 Nome: ${nome}%0A` +
+        `🏫 Escola: ${escola}%0A` +
+        `🏷️ Tipo: ${tipo}%0A` +
+        `🕐 Turno: ${turno}%0A` +
+        `📘 Série: ${serie}%0A` +
+        (latitude && longitude
+          ? `📍 Localização: https://www.google.com/maps?q=${latitude},${longitude}`
+          : "📍 Localização: Não capturada");
+
+      // Substitua o número abaixo pelo seu número de WhatsApp (ex: 55 + DDD + número)
+      const numeroWhatsApp = "5538999565216";
+
+      const url = `https://wa.me/${numeroWhatsApp}?text=${mensagem}`;
+      window.open(url, "_blank");
+    }
+  </script>
+</body>
+</html>
